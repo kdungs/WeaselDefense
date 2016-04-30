@@ -14,12 +14,12 @@ const IMAGES = {
 };
 
 class GameObject {
-  constructor(rect, image, hp, collision_dmg) {
+  constructor(rect, image, hp, collisionDamage) {
     this._rect = rect;
     this._image = image;
     this._maxhp = hp;
     this._hp = hp;
-    this._collision_dmg = collision_dmg;
+    this._collisionDamage = collisionDamage;
   }
   get rect() { return this._rect; }
   get image() { return this._image; }
@@ -57,8 +57,8 @@ class GameObject {
   update(ticks) {}
 
   static handleCollision(lhs, rhs) {
-    lhs.takeDamage(rhs._collision_dmg);
-    rhs.takeDamage(lhs._collision_dmg);
+    lhs.takeDamage(rhs._collisionDamage);
+    rhs.takeDamage(lhs._collisionDamage);
   }
   static isCollision(lhs, rhs) {
     return Rectangle.overlap(lhs.rect, rhs.rect);
@@ -68,21 +68,26 @@ class GameObject {
 class Detector extends GameObject {
   constructor(pos) {
     super(new Rectangle(pos, 480, 263), IMAGES.detector, CONFIG.detector.hp,
-          CONFIG.detector.collision_dmg);
+          CONFIG.detector.collisionDamage);
   }
 };
 
 class Transformer extends GameObject {
   constructor(pos) {
     super(new Rectangle(pos, 48, 48), IMAGES.transformer,
-          CONFIG.transformer.hp, CONFIG.transformer.collision_dmg);
+          CONFIG.transformer.hp, CONFIG.transformer.collisionDamage);
+    this._lightningDamage = CONFIG.transformer.lightningDamage;
+    this._lightningRadius = CONFIG.transformer.lightningRadius;
   }
+
+  get lightningDamage() { return this._lightningDamage; }
+  get lightningRadius() { return this._lightningRadius; }
 };
 
 class Weasel extends GameObject {
   constructor(pos, speed) {
     super(new Rectangle(pos, 32, 32), IMAGES.weasel, CONFIG.weasel.hp,
-          CONFIG.weasel.collision_dmg);
+          CONFIG.weasel.collisionDamage);
     this._dir = Directions.NORTH;
     this._speed = speed;
   }

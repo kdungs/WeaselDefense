@@ -16,6 +16,14 @@ class Vec2d {
   static dot(lhs, rhs) {
     return lhs.x * rhs.x + lhs.y * rhs.y;
   }
+  static distanceSquared(lhs, rhs) {
+    const dx = lhs.x - rhs.x;
+    const dy = lhs.y - rhs.y;
+    return dx * dx + dy  * dy;
+  }
+  static distance(lhs, rhs) {
+    return Math.sqrt(Vec2d.distanceSquared(lhs, rhs));
+  }
 };
 
 const Directions = {

@@ -1,21 +1,23 @@
 "use strict";
 
 const CONFIG = {
-  'startingMoney': 100,
+  'startingMoney': 1000,
   'moneyPerKill': 100,
   'detector': {
     'hp': 1000,
-    'collision_dmg': 100
+    'collisionDamage': 100
   },
   'transformer': {
-    'cost': 100,
+    'cost': 500,
     'hp': 100,
-    'collision_dmg': 100
+    'collisionDamage': 100,
+    'lightningDamage': 0.2,
+    'lightningRadius': 100
   },
   'weasel': {
     'hp': 100,
-    'collision_dmg': 50,
-    'spawnProbability': 0.001,
+    'collisionDamage': 200,
+    'spawnProbability': 0.002,
     'averageSpeed': 0.2
   },
   'explosion': {
