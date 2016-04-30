@@ -3,12 +3,52 @@
   <head>
     <meta charset="utf-8">
     <title>Weasel Defense</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Kevin Dungs">
 
+    <meta property="og:title" content="WeaselDefense">
+    <meta property="og:type" content="game">
+    <meta property="og:description" content="Protect your detector from the weasels!">
+    <meta property="og:image" content="assets/weasel.png">
+
+    <link rel="stylesheet" href="weasel.css">
     <link rel="icon" href="assets/weasel.png" sizes="32x32" type="image/png">
   </head>
   <body>
+    <header id="Head">
+      <hgroup>
+        <h1>WeaselDefense</h1>
+        <p>Protect your detector from the weasels!</p>
+      </hgroup>
+    </header>
+
+    <canvas width="480" height="640" id="GameCanvas"></canvas>
+
+    <aside id="StatsBox">
+      <p class="row">Money: <span id="MoneyCounter">0</span> JTN</p>
+      <p class="row">Weasels: <span id="WeaselCounter">0</span></p>
+    </aside>
+
+    <aside id="Defeat">
+      <h1>You lose!</h1>
+      <p>The weasels destroyed your detector!</p>
+      <img src="assets/defeat.jpg">
+      <p>Reload the page to play again!</p>
+    </aside>
+
     <noscript>Weasel Defense needs JavaScript to run!</noscript>
-    <script src="js/weasel.js"></script>
-    <script src="js/test_weasel.js"></script>
+    <script src="js/fundamentals.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/objects.js"></script>
+    <script src="js/game.js"></script>
+
+    <script>
+    document.onreadystatechange = () => {
+      if (document.readyState === "interactive") {
+        let game = new WeaselDefenseGame();
+        game.play();
+      }
+    }
+    </script>
   </body>
 </html>

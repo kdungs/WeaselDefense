@@ -1,0 +1,138 @@
+"use strict";
+
+function createImage(url) {
+  let img = new Image();
+  img.src = url;
+  return img;
+}
+
+const IMAGES = {
+  'detector': createImage("assets/lhcb.png"),
+  'transformer': createImage("assets/transformer.png"),
+  'weasel': createImage("assets/weasel.png"),
+  'explosion': createImage("assets/explosion.png")
+};
+
+class GameObject {
+  constructor(rect, image, hp, collision_dmg) {
+    this._rect = rect;
+    this._image = image;
+    this._maxhp = hp;
+    this._hp = hp;
+    this._collision_dmg = collision_dmg;
+  }
+  get rect() { return this._rect; }
+  get image() { return this._image; }
+  get alive() { return this._hp > 0; }
+  draw(ctx) {
+    const {x, y} = this._rect.top_left;
+    ctx.drawImage(this._image, x, y);
+    this.drawHpBar(ctx);
+  }
+  takeDamage(dmg) {
+    this._hp -= dmg;
+    if (this._hp < 0) {
+      this._hp = 0;
+    }
+  }
+  drawHpBar(ctx) {
+    const {x, y} = Vec2d.add(this._rect.top_left, new Vec2d(0, -6));
+    const factor = this._hp / this._maxhp;
+    const w = this._rect.width * factor;
+    ctx.fillStyle = this.getHpColor(factor);
+    ctx.fillRect(x, y, w, 4);
+  }
+  getHpColor(factor) {
+    if (factor > 0.75) {
+      return '#00FF00';
+    }
+    if (factor > 0.25) {
+      return '#FFFF00';
+    }
+    return '#FF0000';
+  }
+  move(vec) {
+    this._rect.move(vec);
+  }
+  update(ticks) {}
+
+  static handleCollision(lhs, rhs) {
+    lhs.takeDamage(rhs._collision_dmg);
+    rhs.takeDamage(lhs._collision_dmg);
+  }
+  static isCollision(lhs, rhs) {
+    return Rectangle.overlap(lhs.rect, rhs.rect);
+  }
+};
+
+class Detector extends GameObject {
+  constructor(pos) {
+    super(new Rectangle(pos, 480, 263), IMAGES.detector, CONFIG.detector.hp,
+          CONFIG.detector.collision_dmg);
+  }
+};
+
+class Transformer extends GameObject {
+  constructor(pos) {
+    super(new Rectangle(pos, 48, 48), IMAGES.transformer,
+          CONFIG.transformer.hp, CONFIG.transformer.collision_dmg);
+  }
+};
+
+class Weasel extends GameObject {
+  constructor(pos, speed) {
+    super(new Rectangle(pos, 32, 32), IMAGES.weasel, CONFIG.weasel.hp,
+          CONFIG.weasel.collision_dmg);
+    this._dir = Directions.NORTH;
+    this._speed = speed;
+  }
+  update(ticks) {
+    const velo = Vec2d.scale(this._dir, this._speed);
+    this.move(velo);
+  };
+};
+
+class Explosion {
+  constructor(pos) {
+    this._rect = Rectangle.fromCenter(pos, 100, 87)
+    this._image = IMAGES.explosion;
+    this._ticks = CONFIG.explosion.duration;
+  }
+  get rect() { return this._rect; }
+  get image() { return this._image; }
+  get alive() { return this._ticks > 0; }
+  draw(ctx) {
+    const {x, y} = this._rect.top_left;
+    ctx.drawImage(this._image, x, y);
+  }
+  update() {
+    this._ticks -= 1;
+    if (this._ticks < 0) {
+      this._ticks = 0;
+    }
+  }
+};
+
+class WeaselFactory {
+  constructor(probability, speed) {
+    this._probability = probability;
+    this._speed = speed;
+  };
+  _randomSpeed() {
+    const spread = this._speed / 10;
+    return Math.random() * spread + this._speed;
+  }
+  static _randomX(w) {
+    return Math.random() * (w - 32);
+  }
+  spawn(w, h) {
+    return new Weasel(new Vec2d(WeaselFactory._randomX(w), h + 20),
+                      this._randomSpeed());
+  }
+  spawnRandom(w, h) {
+    if (Math.random() < this._probability) {
+      return this.spawn(w, h);
+    }
+    return undefined;
+  }
+};
