@@ -10,6 +10,9 @@ class Vec2d {
   static add(lhs, rhs) {
     return new Vec2d(lhs.x + rhs.x, lhs.y + rhs.y);
   }
+  static subtract(lhs, rhs) {
+    return new Vec2d(lhs.x - rhs.x, lhs.y - rhs.y);
+  }
   static scale(vec, factor) {
     return new Vec2d(factor * vec.x, factor * vec.y);
   }
