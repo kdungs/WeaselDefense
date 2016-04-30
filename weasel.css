@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #333;
+  font-family: 'Helvetica Neue', 'Arial', 'Nimbus Sans L', sans-serif;
+  font-size: 14pt;
+  text-align: center;
+}
+
+#Head {
+  margin: 10px auto;
+  width: 480px;
+}
+
+#Head h1 {
+  color: #0053A1;
+}
+
+#GameCanvas {
+  border: 1px solid #ccc;
+  margin: 10px auto;
+}
+
+#StatsBox {
+  border: 1px solid #ccc;
+  margin: 0 auto;
+  text-align: left;
+  width: 480px;
+}
+
+#StatsBox .row {
+  background: #eee;
+  border-bottom: 1px dashed #ccc;
+  padding: 4px;
+}
+
+#StatsBox .row:last-child { border: none; }
+
+#Defeat {
+  display: none;
+  background: #333;
+  color: #eee;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+}
