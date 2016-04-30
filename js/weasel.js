@@ -62,15 +62,34 @@ class Rectangle {
 };
 
 class GameObject {
-  constructor(rect, image) {
+  constructor(rect, image, hp) {
     this._rect = rect;
     this._image = image;
+    this._maxhp = hp;
+    this._hp = hp;
   }
   get rect() { return this._rect; }
   get image() { return this._image; }
   draw(ctx) {
     const {x, y} = this._rect.top_left;
     ctx.drawImage(this._image, x, y);
+    this.drawHpBar(ctx);
+  }
+  drawHpBar(ctx) {
+    const {x, y} = Vec2d.add(this._rect.top_left, new Vec2d(0, -6));
+    const factor = this._hp / this._maxhp;
+    const w = this._rect.width * factor;
+    ctx.fillStyle = this.getHpColor(factor);
+    ctx.fillRect(x, y, w, 4);
+  }
+  getHpColor(factor) {
+    if (factor > 0.75) {
+      return '#00FF00';
+    }
+    if (factor > 0.25) {
+      return '#FFFF00';
+    }
+    return '#FF0000';
   }
   move(vec) {
     this._rect.move(vec);
@@ -92,19 +111,19 @@ const IMAGES = {
 
 class Detector extends GameObject {
   constructor(pos) {
-    super(new Rectangle(pos, 480, 40), IMAGES['Detector']);
+    super(new Rectangle(pos, 480, 40), IMAGES['Detector'], 1000);
   }
 };
 
 class Transformer extends GameObject {
   constructor(pos) {
-    super(new Rectangle(pos, 48, 48), IMAGES['Transformer']);
+    super(new Rectangle(pos, 48, 48), IMAGES['Transformer'], 100);
   }
 };
 
 class Weasel extends GameObject {
   constructor(pos, speed) {
-    super(new Rectangle(pos, 32, 32), IMAGES['Weasel']);
+    super(new Rectangle(pos, 32, 32), IMAGES['Weasel'], 100);
     this._dir = Directions.NORTH;
     this._speed = speed;
   }
@@ -125,7 +144,7 @@ class WeaselFactory {
     return Math.random() * spread + this._speed;
   }
   static _randomX() {
-    return Math.random() * 480;
+    return Math.random() * (480 - 32);
   }
   spawn() {
     return new Weasel(new Vec2d(WeaselFactory._randomX(), 620),
@@ -148,12 +167,22 @@ let start = () => {
   document.body.appendChild(canvas);
   let ctx = canvas.getContext('2d');
 
+  let counter = document.createElement('p');
+  counter.style = "margin: 10px; font-size: 20pt;";
+  counter.innerHTML = 'Weasels: 0';
+  document.body.appendChild(counter);
+
+  let money = document.createElement('p');
+  money.style = "margin: 10px; font-size: 20pt;";
+  money.innerHTML = 'Money: 0';
+  document.body.appendChild(money);
+
   let objects = [
-    new Detector(new Vec2d(0, 0)),
+    new Detector(new Vec2d(0, 10)),
     new Transformer(new Vec2d(0, 240))
   ];
 
-  let wf = new WeaselFactory(0.01, 0.1);
+  let wf = new WeaselFactory(0.001, 0.1);
   let ticks = 0;
 
   let gameloop = () => {
