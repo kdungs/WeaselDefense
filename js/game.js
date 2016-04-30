@@ -160,6 +160,11 @@ class WeaselDefenseGame {
   }
 
   showDefeat() {
+    const url = 'https%3A%2F%2Fkdungs.github.io%2FWeaselDefense';
+    const text = `I managed to kill ${this.weasels} weasels before my detector was destroyed. %23WeaselDefense`;
+    const href = `https://twitter.com/share?url=${url}&text=${text}`;
     this.defeatImage.style = 'display: block;';
+    document.getElementById('WeaselsKilled').innerHTML = this.weasels;
+    document.getElementById('TwitterLink').href = href;
   }
 };

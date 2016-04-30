@@ -53,6 +53,14 @@ emph { font-style: italic; }
   padding: 20px;
 }
 
+#Defeat p {
+  padding: 1em;
+}
+
+#Defeat a {
+  color: #98C9E8;
+}
+
 #AlphaWarning {
   color: #A15300;
   font-size: 0.8em;
