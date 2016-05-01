@@ -55,7 +55,7 @@ class WeaselDefenseGame {
                                            CONFIG.weasel.averageSpeed);
     this.money = CONFIG.startingMoney;
     this.weasels = 0;
-    this.defeatImage.style = 'display: none;';
+    this.defeatImage.style.display = 'none';
   }
 
   play() {
@@ -161,8 +161,16 @@ class WeaselDefenseGame {
     const url = 'https%3A%2F%2Fkdungs.github.io%2FWeaselDefense';
     const text = `I managed to kill ${this.weasels} weasels before my detector was destroyed. %23WeaselDefense`;
     const href = `https://twitter.com/share?url=${url}&text=${text}`;
-    this.defeatImage.style = 'display: block;';
+    this.defeatImage.style.display = 'block';
     document.getElementById('WeaselsKilled').innerHTML = this.weasels;
     document.getElementById('TwitterLink').href = href;
   }
 };
+
+
+document.addEventListener('readystatechange', () => {
+  if (document.readyState === "interactive") {
+    let game = new WeaselDefenseGame();
+    game.play();
+  }
+}
