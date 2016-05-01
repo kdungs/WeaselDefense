@@ -1,5 +1,3 @@
-"use strict";
-
 function createImage(url) {
   let img = new Image();
   img.src = url;

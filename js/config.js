@@ -1,5 +1,3 @@
-"use strict";
-
 const CONFIG = {
   'startingMoney': 1000,
   'moneyPerKill': 100,

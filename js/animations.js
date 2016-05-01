@@ -1,5 +1,3 @@
-"use strict";
-
 class Lightning {
   constructor(source, target) {
     this._source = source;

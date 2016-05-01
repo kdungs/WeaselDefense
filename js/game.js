@@ -1,5 +1,3 @@
-"use strict";
-
 class WeaselDefenseGame {
   constructor() {
     this.W = 480;

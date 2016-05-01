@@ -1,5 +1,3 @@
-"use strict";
-
 class Vec2d {
   constructor(x, y) {
     this._x = x;
