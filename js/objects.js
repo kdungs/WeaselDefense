@@ -117,25 +117,30 @@ class Explosion {
 };
 
 class WeaselFactory {
-  constructor(probability, speed) {
+  constructor(probability, speed, probabilityIncreaseFactor, speedIncreaseFactor) {
     this._probability = probability;
     this._speed = speed;
+    this._probabilityIncreaseFactor = probabilityIncreaseFactor;
+    this._speedIncreaseFactor = speedIncreaseFactor;
   };
-  _randomSpeed() {
-    const spread = this._speed / 10;
-    return Math.random() * spread + this._speed;
-  }
-  static _randomX(w) {
-    return Math.random() * (w - 32);
-  }
   spawn(w, h) {
-    return new Weasel(new Vec2d(WeaselFactory._randomX(w), h + 20),
-                      this._randomSpeed());
+    this._speed *= this._speedIncreaseFactor;
+    const x = Math.random() * (w - 32);
+    return new Weasel(new Vec2d(x, h + 20), this._speed);
   }
   spawnRandom(w, h) {
     if (Math.random() < this._probability) {
+      this._probability *= this._probabilityIncreaseFactor;
       return this.spawn(w, h);
     }
     return undefined;
+  }
+  static defaultFactory() {
+    return new WeaselFactory(
+      CONFIG.weasel.spawnProbability,
+      CONFIG.weasel.speed,
+      CONFIG.weasel.spawnProbabilityIncreaseFactor,
+      CONFIG.weasel.speedIncreaseFactor
+    );
   }
 };
