@@ -173,4 +173,4 @@ document.addEventListener('readystatechange', () => {
     let game = new WeaselDefenseGame();
     game.play();
   }
-}
+});
