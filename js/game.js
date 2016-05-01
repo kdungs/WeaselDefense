@@ -3,7 +3,18 @@ class WeaselDefenseGame {
     this.W = 480;
     this.H = 640;
     this.canvas = document.getElementById('GameCanvas');
+    this.showMouse = false;
+    this.mousePos = undefined;
     this.canvas.addEventListener('click', (evt) => { this.clickHandler(evt); });
+    this.canvas.addEventListener('mousemove', (evt) => {
+      this.mousePos = new Vec2d(evt.layerX, evt.layerY);
+    });
+    this.canvas.addEventListener('mouseenter', (evt) => {
+      this.showMouse = true;
+    });
+    this.canvas.addEventListener('mouseleave', (evt) => {
+      this.showMouse = false;
+    });
     this.ctx = this.canvas.getContext('2d');
     this.counters = {
       'weasels': document.getElementById('WeaselCounter'),
@@ -24,7 +35,19 @@ class WeaselDefenseGame {
     this.tryBuyTransformer(x, y);
   }
 
+  drawMouse() {
+    if (!this.showMouse) {
+      return;
+    }
+    const {x, y} = this.mousePos;
+    const canPlace = this.canPlaceTransformer(x - 24, y - 24);
+    const color = canPlace ? '#00FF00' : '#FF0000';
+    this.ctx.strokeStyle = color;
+    this.ctx.strokeRect(x - 24, y - 24, 48, 48);
+  }
+
   canPlaceTransformer(x, y) {
+    if (this.money < CONFIG.transformer.cost) { return false; }
     if (y < 280) { return false; }
     if (x < 0 || x > this.W - 48) { return false; }
     const trect = new Rectangle(new Vec2d(x, y), 48, 48);
@@ -38,9 +61,8 @@ class WeaselDefenseGame {
   }
 
   tryBuyTransformer(x, y) {
-    const cost = CONFIG.transformer.cost;
-    if (this.money >= cost && this.canPlaceTransformer(x, y)) {
-      this.money -= cost;
+    if (this.canPlaceTransformer(x, y)) {
+      this.money -= CONFIG.transformer.cost;
       this.objects.push(new Transformer(new Vec2d(x, y)));
     }
   }
@@ -147,6 +169,7 @@ class WeaselDefenseGame {
     this.handleRewards();
     this.handleDeadObjects();
     this.updateCounters();
+    this.drawMouse();
     if (this.running) {
       setTimeout(() => {this.gameloop(); }, 10);
     }

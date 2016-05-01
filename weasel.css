@@ -23,6 +23,7 @@ emph { font-style: italic; }
 
 #GameCanvas {
   border: 1px solid #ccc;
+  cursor: none;
   margin: 10px auto;
 }
 
