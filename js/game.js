@@ -73,8 +73,7 @@ class WeaselDefenseGame {
       new Detector(new Vec2d(0, 6))
     ];
     this.detector = this.objects[0];
-    this.weaselSpawner = new WeaselFactory(CONFIG.weasel.spawnProbability,
-                                           CONFIG.weasel.averageSpeed);
+    this.weaselSpawner = WeaselFactory.defaultFactory();
     this.money = CONFIG.startingMoney;
     this.weasels = 0;
     this.defeatImage.style.display = 'none';

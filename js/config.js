@@ -16,7 +16,9 @@ const CONFIG = {
     'hp': 100,
     'collisionDamage': 200,
     'spawnProbability': 0.002,
-    'averageSpeed': 0.2
+    'spawnProbabilityIncreaseFactor': 1.01,
+    'speed': 0.2,
+    'speedIncreaseFactor': 1.01
   },
   'explosion': {
     'duration': 100
