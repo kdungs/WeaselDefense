@@ -4,10 +4,14 @@ class WeaselDefenseGame {
     this.H = 640;
     this.canvas = document.getElementById('GameCanvas');
     this.showMouse = false;
-    this.mousePos = undefined;
+    this.mousePos = new Vec2d(-100, -100);
     this.canvas.addEventListener('click', (evt) => { this.clickHandler(evt); });
     this.canvas.addEventListener('mousemove', (evt) => {
-      this.mousePos = new Vec2d(evt.layerX, evt.layerY);
+      const rect = this.canvas.getBoundingClientRect();
+      const x = evt.clientX - rect.left - 1;
+      const y = evt.clientY - rect.top - 1;
+      this.mousePos = new Vec2d(x, y);
+      //this.mousePos = new Vec2d(evt.layerX, evt.layerY);
     });
     this.canvas.addEventListener('mouseenter', (evt) => {
       this.showMouse = true;
@@ -30,8 +34,8 @@ class WeaselDefenseGame {
   }
 
   clickHandler(evt) {
-    const x = evt.layerX - 24;
-    const y = evt.layerY - 24;
+    const x = this.mousePos.x - 24;
+    const y = this.mousePos.y - 24;
     this.tryBuyTransformer(x, y);
   }
 
