@@ -45,7 +45,7 @@ class GameObject {
       return '#00FF00';
     }
     if (factor > 0.25) {
-      return '#FFFF00';
+      return '#F0F000';
     }
     return '#FF0000';
   }
